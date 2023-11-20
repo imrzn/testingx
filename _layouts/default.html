@@ -20,10 +20,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for data in site.data.data.values %}
+            {% for data in site.data.data %}
             <tr>
                 <td>{{ data[0] }}</td>
-                <td><a href="../work/{{ data[1] }}">{{ data[1] }}</a></td>
+                <td><a href="../work/{{ data[1] | replace: ' ', '-' | downcase }}">{{ data[1] }}</a></td>
                 <td>{{ data[2] }}</td>
                 <td>{{ data[3] }}</td>
                 <td>{{ data[4] }}</td>
