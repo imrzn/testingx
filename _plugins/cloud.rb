@@ -45,36 +45,36 @@ module JsonProcessor
     end
 
     def generate_from_local(file_path)
-      begin
-        json_data = JSON.parse(File.read(file_path))
-        
-        # Remove the entire work directory and its contents
-        FileUtils.rm_rf('work')
-
-        values = json_data['values']
-
-        values.each do |item_data|
-          title = item_data[0]
-          url = item_data[1]
-          content = item_data[2]
-          var1 = item_data[3]
-          var2 = item_data[4]
-          var3 = item_data[5]
-          var4 = item_data[6]
-
-          folder_path = File.join('work', url)
-          FileUtils.mkdir_p(folder_path)
-
-          generated_html = generate_html(title, url, content, var1, var2, var3, var4)
-
-          File.open(File.join(folder_path, 'index.html'), 'w') do |file|
-            file.write(generated_html)
+        begin
+          json_data = JSON.parse(File.read(file_path))
+          
+          # Remove the entire work directory and its contents
+          FileUtils.rm_rf('work')
+      
+          values = json_data['values']
+      
+          values.each do |item_data|
+            title = item_data[0]
+            url = item_data[1].downcase.gsub(/\s+/, "-")  # Convert to lowercase and replace spaces with hyphens
+            content = item_data[2]
+            var1 = item_data[3]
+            var2 = item_data[4]
+            var3 = item_data[5]
+            var4 = item_data[6]
+      
+            folder_path = File.join('work', url)
+            FileUtils.mkdir_p(folder_path)
+      
+            generated_html = generate_html(title, url, content, var1, var2, var3, var4)
+      
+            File.open(File.join(folder_path, 'index.html'), 'w') do |file|
+              file.write(generated_html)
+            end
           end
+        rescue StandardError => e
+          puts "Error fetching or processing data: #{e.message}"
         end
-      rescue StandardError => e
-        puts "Error fetching or processing data: #{e.message}"
-      end
-    end
+      end      
 
     def generate_html(title, url, content, var1, var2, var3, var4)
       demo_html = File.read('demo/index.html')
