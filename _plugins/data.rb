@@ -1,9 +1,32 @@
 require 'json'
 require 'net/http'
 require 'fileutils'
+require 'openssl'
+require 'base64'
+
+def decrypt_password(encrypted_password, key, iv)
+decipher = OpenSSL::Cipher.new('AES-256-CBC')
+decipher.decrypt
+decipher.key = key
+decipher.iv = iv
+
+decrypted = decipher.update(encrypted_password) + decipher.final
+end
+
+def read_from_file(filename)
+File.read(filename)
+end
+
+encrypted_password = read_from_file('_plugins/xyz/1.txt')
+key = read_from_file('_plugins/xyz/2.txt')
+iv = read_from_file('_plugins/xyz/3.txt')
+
+decrypted_password = decrypt_password(encrypted_password, key, iv)
+
+api_key = Base64.decode64(decrypted_password)
 
 # Step 1: Fetch data from a URL in JSON format using Net::HTTP
-url = URI('https://sheets.googleapis.com/v4/spreadsheets/102jPm41ih-0yhYSZC3gkI6UJgRcZA4W5k4wX8vHyeaw/values/data?key=AIzaSyCl1SKJlzGSHC2eG6qXUI9hjJagZ-eAVFU')
+url = URI("https://sheets.googleapis.com/v4/spreadsheets/102jPm41ih-0yhYSZC3gkI6UJgRcZA4W5k4wX8vHyeaw/values/data!A2:ZZZ?key=#{api_key}")
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true if url.scheme == 'https'
 
