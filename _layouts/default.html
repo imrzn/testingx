@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>title</td>
+                <td>url</td>
+                <td>content</td>
+                <td>content</td>
+                <td>content</td>
+                <td>content</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in site.data.data.values %}
+            <tr>
+                <td>{{ data[0] }}</td>
+                <td><a href="../work/{{ data[1] }}">{{ data[1] }}</a></td>
+                <td>{{ data[2] }}</td>
+                <td>{{ data[3] }}</td>
+                <td>{{ data[4] }}</td>
+                <td>{{ data[5] }}</td>
+                <td>{{ data[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
